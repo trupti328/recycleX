@@ -1,8 +1,8 @@
 const db = {
   LOCAL_HOST: "localhost",
-  USER_NAME: "W2_87325_Rajvardhan",
+  USER_NAME: "W2_87012_Trupti",
   DB_NAME: "recycle_x",
-  PASSWORD: "manager",
+  PASSWORD: "Trupti@28",
 };
 
 // Supplier-related views
@@ -13,7 +13,7 @@ const supplier = {
   SUPPLIER_SELECTIONS: "supplierSelections_v",
   SUPPLIER_ORDERS: "supplierOrders_v",
   SUPPLIER_ORDER_ITEMS: "supplierOrderItems_v",
-  SUPPLIER_CART :"supplierCart_v",
+  SUPPLIER_CART: "supplierCart_v",
   PICKUP_ADDRESS: "pickupAddress_v",
 };
 

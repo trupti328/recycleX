@@ -7,6 +7,10 @@ const app = express();
 const commonRoutes = require("./routes/commanRoutes");
 const consumerRoutes = require("./routes/consumerRoutes");
 const supplierRoutes = require("./routes/supplierRoutes");
+const cors = require("cors");
+
+// Allow all origins
+app.use(cors());
 
 // Middleware
 app.use(appendFileLogs);
@@ -22,19 +26,28 @@ app.use((request, response, next) => {
 });
 
 app.use((request, response, next) => {
-  if (request.url.includes("/signin") || request.url.includes("/signup")) {
+  if (request.url.includes("/signin") || request.url.includes("/signup") || request.url.includes("/verifyEmail")) {
     next();
   } else {
     if (
       request.headers.authorization != null ||
       request.headers.authorization != undefined
     ) {
-      const payload = jwt.verify(
-        request.headers.authorization,
-        config.SECRET_KEY
-      );
-      if (payload != null && payload.status == "Active") {
-        next();
+      const authHeader = request.headers.authorization;
+      if (authHeader.startsWith("Bearer ")) {
+        const token = authHeader.split(" ")[1];
+        const payload = jwt.verify(token, config.SECRET_KEY);
+        if (payload != null && payload.status == "Active") {
+          next();
+        } else {
+          response
+            .status(403)
+            .json(reply.onError(403, null, "Invalid or expired token"));
+        }
+      } else {
+        response
+          .status(403)
+          .json(reply.onError(403, null, "Bearer token required"));
       }
     } else {
       response
@@ -43,6 +56,7 @@ app.use((request, response, next) => {
     }
   }
 });
+
 
 // Routing
 app.use("/supplier", supplierRoutes);
